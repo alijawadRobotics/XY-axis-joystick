@@ -1,0 +1,121 @@
+//Ali Jawad
+//XY-axis Joystick control
+//11/2/2024
+//SIP411_Objective4
+
+#include<Servo.h> // import servo library
+const int Y_pin = 1; // Y-axis pin define
+
+//define digital outputs for the L293D IC
+#define ENABLE 5 
+#define DIRA 3
+#define DIRB 4
+int i;
+int x_pin = A0;  //X-axis pin define
+int pos = 0;
+Servo s1;
+
+void setup()
+{
+  
+  pinMode(ENABLE,OUTPUT);
+  pinMode(DIRA,OUTPUT); //direction fwd
+  pinMode(DIRB,OUTPUT); //direction reverse
+  Serial.begin(9600);
+  pinMode(A0, INPUT); 
+  pinMode(2, INPUT);
+  digitalWrite(2, HIGH);
+
+  s1.attach(2);          //Servo motor pin 2
+  s1.write(pos);
+
+}
+
+void loop()
+{
+ int x_data = analogRead(A0);
+ 
+ Serial.print("x_data:");
+ Serial.print(x_data);
+ Serial.print("\t");
+ delay(80);
+  long y;
+  y = analogRead(Y_pin);
+  Serial.print("val=");
+  Serial.println(y);
+  if(y == 0){
+    analogWrite(ENABLE,255); 
+    digitalWrite(DIRA,LOW); //FWD
+    digitalWrite(DIRB,HIGH);
+    }
+  if(y>0&&y<100){
+    analogWrite(ENABLE,200); 
+    digitalWrite(DIRA,LOW); //FWD
+    digitalWrite(DIRB,HIGH);
+    }
+  if(y>100&&y<250){
+    analogWrite(ENABLE,180); 
+    digitalWrite(DIRA,LOW); //FWD
+    digitalWrite(DIRB,HIGH);
+    }
+  if(y>250&&y<400){
+    analogWrite(ENABLE,128); 
+    digitalWrite(DIRA,LOW); //FWD
+    digitalWrite(DIRB,HIGH);
+    }
+  if(y>400&&y<500){
+    analogWrite(ENABLE,80); 
+    digitalWrite(DIRA,LOW); //FWD
+    digitalWrite(DIRB,HIGH);
+    }    
+  if(y>500&&y<600){
+    analogWrite(ENABLE,0); 
+    digitalWrite(DIRA,LOW); //FWD
+    digitalWrite(DIRB,HIGH);
+    }
+  if(y == 1023){
+    analogWrite(ENABLE,255); 
+    digitalWrite(DIRA,HIGH); //Bcwrd
+    digitalWrite(DIRB,LOW);
+    }
+  if(y>923&&y<1023){
+    analogWrite(ENABLE,200); 
+    digitalWrite(DIRA,HIGH); //Bcwrd
+    digitalWrite(DIRB,LOW);
+    }
+  if(y>800&&y<923){
+    analogWrite(ENABLE,180); 
+    digitalWrite(DIRA,HIGH); //Bcwrd
+    digitalWrite(DIRB,LOW);
+    }
+  if(y>700&&y<800){
+    analogWrite(ENABLE,128); 
+    digitalWrite(DIRA,HIGH); //Bcwrd
+    digitalWrite(DIRB,LOW);
+    }
+  if(y>600&&y<700){
+    analogWrite(ENABLE,80); 
+    digitalWrite(DIRA,HIGH); //Bcwrd
+    digitalWrite(DIRB,LOW);
+    } 
+    if(x_data >= 550) // servo movement
+{
+  if(pos <= 180) // 0-180 angle
+  {
+  pos = pos + 15; //increment position by 15
+  s1.write(pos);
+  }
+}
+else if(x_data <= 500)
+{
+  if(pos >= 0)
+  {
+   pos = pos - 15; //decrement position by 15
+   s1.write(pos);
+  }   
+}
+ 
+
+
+}
+  
